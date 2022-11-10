@@ -9,6 +9,8 @@ class Student:
 
     def add_courses(self, course_name):
         self.finished_courses.append(course_name)
+        res = " ".join(self.finished_courses)
+        return res
 
     def rate_lect(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached \
@@ -31,12 +33,12 @@ class Student:
 
     def __str__(self):
         res = (
-            'Студент\n'
+            '\nСтудент\n'
             f'Имя: {self.name}\n'
             f'Фамилия: {self.surname}\n'
             f'Средняя оценка за домашние задания: {self._average_grade()}\n'
             f'Курсы в процессе обучения: {", ".join(self.courses_in_progress)}\n'
-            f'Завершенные курсы: {self.finished_courses}\n'
+            f'Завершенные курсы: {", ".join(self.finished_courses)}'
         )
         return res
 
@@ -44,7 +46,12 @@ class Student:
         if not isinstance(other, Student):
             print('Некорректные данные для сравнения!')
             return
-        return self._average_grade() < other._average_grade()
+        if self._average_grade() < other._average_grade():
+            res = f'Средний балл студента {self.surname} ниже, чем у {other.surname}'
+            return res
+        else:
+            res = f'Средний балл студента {other.surname} ниже, чем у {self.surname}'
+            return res
 
 
 class Mentor:
@@ -70,10 +77,10 @@ class Lecturer(Mentor):
 
     def __str__(self):
         res = (
-            'Лектор\n'
+            '\nЛектор\n'
             f'Имя: {self.name}\n'
             f'Фамилия: {self.surname}\n'
-            f'Средняя оценка за лекции: {self._average_grade()}\n'
+            f'Средняя оценка за лекции: {self._average_grade()}'
         )
         return res
 
@@ -81,7 +88,12 @@ class Lecturer(Mentor):
         if not isinstance(other, Lecturer):
             print('Некорректные данные для сравнения!')
             return
-        return self._average_grade() < other._average_grade()
+        if self._average_grade() < other._average_grade():
+            res = f'Средняя оценка лектора {self.surname} ниже, чем у {other.surname}'
+            return res
+        else:
+            res = f'Средняя оценка лектора {other.surname} ниже, чем у {self.surname}'
+            return res
 
 
 class Reviewer(Mentor):
@@ -95,53 +107,60 @@ class Reviewer(Mentor):
             return 'Ошибка'
 
     def __str__(self):
-        res = f"Ревьювер\nИмя: {self.name}\nФамилия: {self.surname}"
+        res = f"\nРевьювер\nИмя: {self.name}\nФамилия: {self.surname}"
         return res
 
 
-best_student = Student('Boris', 'Uhov', 'male')
-student_2 = Student('Vlad', 'Segreev', 'male')
-cool_lecturer = Lecturer('Ivan', 'Minakov')
-lecturer_2 = Lecturer('Sergey', 'Petrov')
-reviewer = Reviewer('Mike', 'Vazovzki')
-cool_lecturer.courses_attached += ['Python']
-cool_lecturer.courses_attached += ['Git']
-lecturer_2.courses_attached += ['Python']
-lecturer_2.courses_attached += ['Git']
+# def students_avg_rate(students, course):
 
 
-best_student.courses_in_progress += ['Python']
-best_student.courses_in_progress += ['Git']
-best_student.rate_lect(cool_lecturer, 'Python', 10)
-best_student.rate_lect(cool_lecturer, 'Python', 9)
-best_student.rate_lect(cool_lecturer, 'Python', 8)
-best_student.rate_lect(cool_lecturer, 'Git', 7)
-best_student.rate_lect(cool_lecturer, 'Git', 9)
-best_student.rate_lect(lecturer_2, 'Python', 7)
-best_student.rate_lect(lecturer_2, 'Python', 6)
-best_student.rate_lect(lecturer_2, 'Python', 8)
-best_student.rate_lect(lecturer_2, 'Git', 10)
-best_student.rate_lect(lecturer_2, 'Git', 9)
-student_2.courses_in_progress += ['Python']
-student_2.courses_in_progress += ['Git']
 
-reviewer.courses_attached += ['Python']
-reviewer.courses_attached += ['Git']
-reviewer.rate_hw(best_student, 'Python', 7)
-reviewer.rate_hw(best_student, 'Python', 5)
-reviewer.rate_hw(best_student, 'Python', 9)
-reviewer.rate_hw(best_student, 'Git', 8)
-reviewer.rate_hw(best_student, 'Git', 9)
-reviewer.rate_hw(best_student, 'Git', 8)
-reviewer.rate_hw(student_2, 'Python', 6)
-reviewer.rate_hw(student_2, 'Python', 8)
-reviewer.rate_hw(student_2, 'Python', 9)
-reviewer.rate_hw(student_2, 'Python', 4)
-reviewer.rate_hw(student_2, 'Git', 6)
-reviewer.rate_hw(student_2, 'Git', 9)
 
-print(cool_lecturer)
-print(best_student)
-print(student_2)
-print(best_student < student_2)
-print(cool_lecturer < lecturer_2)
+Igor_Ivanov = Student('Igor', 'Ivanov', 'male')
+Ira_Petrova = Student('Ira', 'Petrova', 'female')
+
+Ivan_Minakov = Lecturer('Ivan', 'Minakov')
+Gleb_Pavlov = Lecturer('Gleb', 'Pavlov')
+
+Max_Vasin = Reviewer('Max', 'Vasin')
+Kirill_Markov = Reviewer('Kirill', 'Markov')
+
+Ivan_Minakov.courses_attached += ['Python']
+Gleb_Pavlov.courses_attached += ['Git']
+
+Max_Vasin.courses_attached += ['Python']
+Kirill_Markov.courses_attached += ['Git']
+
+Igor_Ivanov.courses_in_progress += ['Python']
+Igor_Ivanov.courses_in_progress += ['Git']
+Igor_Ivanov.add_courses('Basic Programming')
+Ira_Petrova.courses_in_progress += ['Python']
+Ira_Petrova.courses_in_progress += ['Git']
+Ira_Petrova.add_courses('Basic Programming')
+
+Igor_Ivanov.rate_lect(Ivan_Minakov, 'Python', 7)
+Igor_Ivanov.rate_lect(Ivan_Minakov, 'Python', 9)
+Ira_Petrova.rate_lect(Ivan_Minakov, 'Python', 8)
+Ira_Petrova.rate_lect(Ivan_Minakov, 'Python', 6)
+Igor_Ivanov.rate_lect(Gleb_Pavlov, 'Git', 9)
+Igor_Ivanov.rate_lect(Gleb_Pavlov, 'Git', 8)
+Ira_Petrova.rate_lect(Gleb_Pavlov, 'Git', 10)
+Ira_Petrova.rate_lect(Gleb_Pavlov, 'Git', 6)
+
+Max_Vasin.rate_hw(Igor_Ivanov, 'Python', 7)
+Max_Vasin.rate_hw(Igor_Ivanov, 'Python', 6)
+Max_Vasin.rate_hw(Ira_Petrova, 'Python', 9)
+Max_Vasin.rate_hw(Ira_Petrova, 'Python', 8)
+Kirill_Markov.rate_hw(Igor_Ivanov, 'Git', 8)
+Kirill_Markov.rate_hw(Igor_Ivanov, 'Git', 7)
+Kirill_Markov.rate_hw(Ira_Petrova, 'Git', 9)
+Kirill_Markov.rate_hw(Ira_Petrova, 'Git', 9)
+
+print(Ira_Petrova)
+print(Igor_Ivanov)
+print(Ira_Petrova < Igor_Ivanov)
+print(Ivan_Minakov)
+print(Gleb_Pavlov)
+print(Ivan_Minakov < Gleb_Pavlov)
+print(Max_Vasin)
+print(Kirill_Markov)
