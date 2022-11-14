@@ -111,9 +111,40 @@ class Reviewer(Mentor):
         return res
 
 
-# def students_avg_rate(students, course):
+def students_avg_rate(students, course):
+    avg = 0
+    count = 0
+    for student in students:
+        for key, val in student.grades.items():
+            if key in student.courses_in_progress and key == course:
+                avg += sum(val) / len(val)
+        count += 1
+    average = round(avg / count, 1)
+    res = f'Средний балл студентов за домашние задания по курсу {course} равен: {average}'
+    return print(res)
 
 
+def lecturer_avg_rate(lecturers, course):
+    avg = 0
+    count = 0
+    for lecturer in lecturers:
+        for key, val in lecturer.lect_grades.items():
+            if key in lecturer.courses_attached and key == course:
+                avg += sum(val) / len(val)
+                count += 1
+    average = round(avg / count, 1)
+    res = f'Средняя оценка лекторов за проведенные занятия по курсу {course} равен: {average}'
+    return print(res)
+
+
+def average_rate(students):
+    courses = []
+    for student in students:
+        for course in student.courses_in_progress:
+            if course not in courses:
+                courses.append(course)
+        res = f'\nНа курсе преподаются дисциплины: {", ".join(courses)}'
+        return print(res)
 
 
 Igor_Ivanov = Student('Igor', 'Ivanov', 'male')
@@ -150,7 +181,7 @@ Ira_Petrova.rate_lect(Gleb_Pavlov, 'Git', 6)
 Max_Vasin.rate_hw(Igor_Ivanov, 'Python', 7)
 Max_Vasin.rate_hw(Igor_Ivanov, 'Python', 6)
 Max_Vasin.rate_hw(Ira_Petrova, 'Python', 9)
-Max_Vasin.rate_hw(Ira_Petrova, 'Python', 8)
+Max_Vasin.rate_hw(Ira_Petrova, 'Python', 10)
 Kirill_Markov.rate_hw(Igor_Ivanov, 'Git', 8)
 Kirill_Markov.rate_hw(Igor_Ivanov, 'Git', 7)
 Kirill_Markov.rate_hw(Ira_Petrova, 'Git', 9)
@@ -164,3 +195,11 @@ print(Gleb_Pavlov)
 print(Ivan_Minakov < Gleb_Pavlov)
 print(Max_Vasin)
 print(Kirill_Markov)
+
+students_list = [Igor_Ivanov, Ira_Petrova]
+lecturer_list = [Ivan_Minakov, Gleb_Pavlov]
+# students_avg_rate(students, 'cool')
+average_rate(students_list)
+discipline = input('Введите название предмета для расчета средней оценки: ')
+students_avg_rate(students_list, discipline)
+lecturer_avg_rate(lecturer_list, discipline)
